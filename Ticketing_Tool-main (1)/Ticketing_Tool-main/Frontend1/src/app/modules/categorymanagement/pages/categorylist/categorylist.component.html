@@ -1,0 +1,69 @@
+<app-layout>
+    <div id="categorylist">
+        <div class="main-wrapper">
+            <div class="tableheader">
+                <h2>Category List</h2>
+                <!-- Add Button-->
+                <button mat-flat-button style="float: left;" class="btn-upload" type="button" (click)="addCategory()">
+                    Add Category
+                </button>
+                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+                    matSortDirection="desc" class="mat-elevation-z2">
+                    <!-- category name Column -->
+                    <ng-container matColumnDef="category_name">
+                        <th mat-header-cell *matHeaderCellDef> Category Name</th>
+                        <th mat-header-cell *matHeaderCellDef>
+                            Category Name
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element && element.category_name ? element.category_name : ''}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="primary_contact">
+                        <th mat-header-cell *matHeaderCellDef> Primary Contact</th>
+                        <th mat-header-cell *matHeaderCellDef>
+                            Primary Contact
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element && element.primary_contact && element.primary_contact.first_name ?
+                            element.primary_contact.first_name:''}}
+                            {{element && element.primary_contact && element.primary_contact.last_name ?
+                            element.primary_contact.last_name:''}}
+
+                        </td>
+                    </ng-container>
+                    <!--category Date Column-->
+                    <ng-container matColumnDef="category_Date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
+                        <th mat-header-cell mat-sort-header sortActionDescription="Sort by category_Date"
+                            *matHeaderCellDef>
+                            Created At
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{(element && element.createdAt ? element.createdAt : '') | date:'MMM d, y'}}
+                        </td>
+                    </ng-container>
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef class="actioncol">Action</th>
+                        <td mat-cell *matCellDef="let row" style="text-align: center">
+                            <button mat-mini-fab class="btn-view" matTooltip="restore Category"
+                                (click)="categorymappage(row)" aria-label="Example icon button with a delete icon">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </td>
+                        <!--No category message-->
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="text-center">No Category List Found</td>
+                    </tr>
+                </table>
+                <!--Pagination-->
+                <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+        </div>

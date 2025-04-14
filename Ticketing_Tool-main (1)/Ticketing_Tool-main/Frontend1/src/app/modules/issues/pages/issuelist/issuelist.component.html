@@ -1,0 +1,270 @@
+<app-layout>
+  <div id="issuelist-page">
+    <div class="tableheader">
+      <div class="main-wrapper">
+        <h2>Issues List</h2>
+        <!-- dropdown for issues -->
+        <mat-form-field *ngIf="this.role == 'Admin' || this.role == 'SuperAdmin'" appearance="outline">
+          <mat-label>Issue</mat-label>
+          <mat-select [(value)]="status" (selectionChange)="Issues()">
+            <mat-option selected value=" ">
+              Select Issue Type
+            </mat-option>
+            <mat-option value="All"> All </mat-option>
+            <mat-option value="Raised_To_Me">Raised To Me </mat-option>
+            <mat-option value="Raised_By_Me"> Raised By Me </mat-option>
+          </mat-select>
+          <!-- dropdown for status -->
+        </mat-form-field>
+        <mat-form-field *ngIf="this.role == 'Admin' || this.role == 'SuperAdmin'" appearance="outline">
+          <mat-label>Issue Status</mat-label>
+          <mat-select [(value)]="issue_status" (selectionChange)="issuestatus()">
+            <mat-option selected value=" ">
+              Select Issue Status
+            </mat-option>
+            <mat-option value="Open"> Open </mat-option>
+            <mat-option value="In-Progress"> In-Progress </mat-option>
+            <mat-option value="Close"> Closed </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- dropdown for issue categories -->
+        <mat-form-field class="full-width-input" appearance="outline"
+          *ngIf="this.role == 'Admin' || this.role == 'SuperAdmin'">
+          <mat-label>Issue Categories</mat-label>
+          <mat-select [(value)]="issue_type" (selectionChange)="displayFn($event.value)">
+            <mat-option value=" ">Select Categories</mat-option>
+            <mat-option *ngFor="let cat of categorylist" [value]="cat._id">
+              {{ cat.category_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- Add issue Button -->
+        <div>
+          <button mat-flat-button class="btn-upload" type="button" (click)="addIssue()">
+            Raise An Issue
+          </button>
+        </div>
+        <!-- radio button group-->
+        <div class="expitem">
+          <mat-radio-button *ngIf="this.role == 'User'" value="raised_to_me" color="primary" style="margin-left:15px;"
+            (change)="getIssuesRaisedtome()" checked>Raised To
+            me</mat-radio-button>
+          <mat-radio-button *ngIf="this.role=='User'" value="raised_by_me" color="primary" style="margin-left: 5px;"
+            (change)="getIssuesRaisedByme()">Raised By
+            me</mat-radio-button>
+          <!-- Table -->
+        </div>
+
+        <table *ngIf="this.role !== 'Admin' ||this.role !== 'SuperAdmin'" mat-table [dataSource]="dataSource" matSort
+          (matSortChange)="announceSortChange($event)" matSortDirection="desc" class="mat-elevation-z2">
+          <!-- issue_number Column -->
+          <ng-container matColumnDef="issue_number">
+            <th mat-header-cell mat-sort-header sortActionDescription="Sort by issue_number" *matHeaderCellDef>
+              Issue No
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element&&element.issue_number ? element.issue_number:''}}
+            </td>
+          </ng-container>
+          <!-- issue_title Column -->
+          <ng-container matColumnDef="issue_title">
+            <th mat-header-cell *matHeaderCellDef>
+              Issue Title
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element&&element.issue_title ? element.issue_title:''}}
+            </td>
+          </ng-container>
+          <!-- Issue categories  Column -->
+          <ng-container matColumnDef="issue_type">
+            <th mat-header-cell *matHeaderCellDef>
+              Issue Categories
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element && element.issue_type && element.issue_type.category_name ? element.issue_type.category_name :
+              ''}}
+            </td>
+          </ng-container>
+          <!-- issue_raised_by -->
+          <ng-container matColumnDef="issue_raised_by">
+            <th mat-header-cell *matHeaderCellDef>
+              Issue Raised By
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container
+                *ngIf="element.user_ID && element.user_ID.first_name && element.user_ID.last_name; else email">
+                {{element.user_ID.first_name}} {{element.user_ID.last_name}}
+              </ng-container>
+              <ng-template #email>
+                {{element.user_ID && element.user_ID.email ? element.user_ID.email : ''}}
+              </ng-template>
+            </td>
+          </ng-container>
+          <!-- <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="element.dataSource === 'email'; else fullName">
+                {{element.user_ID && element.user_ID.email ? element.user_ID.email : ''}}
+              </ng-container>
+              <ng-template #fullName>
+                {{ (element && element.user_ID && element.user_ID.first_name ? element.user_ID.first_name : '') + ' ' +
+                (element && element.user_ID && element.user_ID.last_name ? element.user_ID.last_name : '') +
+                (element && element.user_ID && element.user_ID.email ? ' ' + element.user_ID.email : '') ||
+                (element.user_ID && element.user_ID.email ? element.user_ID.email : '') }}
+              </ng-template>
+            </td>
+          </ng-container> -->
+          <!-- <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="element.dataSource === 'email'; else fullName">
+                {{element.user_ID && element.user_ID.email ? element.user_ID.email :fullNameRef.textContent}}
+              </ng-container>
+              <ng-template #fullName>
+                {{element && element.user_ID && element.user_ID.first_name ? element.user_ID.first_name : ''}}
+                {{element && element.user_ID && element.user_ID.last_name ? element.user_ID.last_name : ''}}
+                {{element.user_ID && element.user_ID.email ? '' + element.user_ID.email + '' : ''}}
+              </ng-template>
+            </td>
+          </ng-container> -->
+
+          <!-- Assigned_To  Column -->
+          <ng-container matColumnDef="assigned_to">
+            <th mat-header-cell *matHeaderCellDef>
+              Issue Assigned To
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element && element.assigned_to && element.assigned_to.first_name ? element.assigned_to.first_name :
+              ''}}
+              {{element && element.assigned_to && element.assigned_to.last_name ? element.assigned_to.last_name : ''}}
+            </td>
+          </ng-container>
+          <!-- issue_date Column -->
+          <ng-container matColumnDef="issue_date">
+            <th mat-header-cell mat-sort-header sortActionDescription="Sort by issue_date" *matHeaderCellDef>
+              Created At
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ (element && element.createdAt ? element.createdAt : '') | date:'MMM d, y' }}
+            </td>
+          </ng-container>
+
+
+          <!-- issue_status -->
+          <ng-container matColumnDef="issue_status">
+            <th mat-header-cell *matHeaderCellDef>
+              Issue Status
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element && element.issue_status ? element.issue_status : ''}}
+            </td>
+          </ng-container>
+          <!-- Action Column -->
+          <ng-container *ngIf="this.role !== 'Admin' ||this.role !== 'SuperAdmin'||this.role=='User'"
+            matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef class="actioncol">Action</th>
+            <td mat-cell *matCellDef="let row" style="text-align: center">
+              <button *ngIf="this.role == 'Admin' || this.role == 'SuperAdmin'||this.role=='User'" mat-mini-fab
+                class="btn-view" matTooltip="restore comment" (click)="IssueCommentpage(row)"
+                aria-label="Example icon button with a delete icon">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <!-- No issue found Message -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="text-center">No Issue Found</td>
+          </tr>
+        </table>
+        <!-- Pagination -->
+        <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+        <!-- table 2 -->
+        <table *ngIf="this.role == 'Admin||SuperAdmin'" mat-table [dataSource]="dataSource" matSort
+          (matSortChange)="announceSortChange($event)" matSortDirection="desc" class="mat-elevation-z2">
+          <!-- dropdown for status -->
+          <mat-form-field appearance="outline">
+            <mat-label>Issue Status</mat-label>
+            <mat-select [(value)]="status">
+              <mat-option selected value="Open">
+                Select Issue Status
+              </mat-option>
+              <mat-option value="Open"> Open </mat-option>
+              <mat-option value="In-Progress"> In-Progress </mat-option>
+              <mat-option value="Close"> Closed </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- Radio button group -->
+          <div class="expitem">
+            <mat-radio-group aria-label="Select an option">
+              <mat-radio-button value="raised_by_me" color="primary" style="margin-left: 5px;"
+                (change)="getIssuesRaisedBymelist()" checked>Raised To
+                me</mat-radio-button>
+              <mat-radio-button value="raised_to_me" style="margin-left:15px;"
+                (change)="getIssuesRaisedtomelist()">Raised
+                By me</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <!-- issue_title Column -->
+          <ng-container matColumnDef="issue_title">
+            <th mat-header-cell mat-sort-header sortActionDescription="Sort by issue_title" *matHeaderCellDef>
+              Issue Title
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element && element.issue_title ? element.issue_title : ''}}
+            </td>
+          </ng-container>
+          <!-- issue_raised_by -->
+          <ng-container matColumnDef="issue_raised_by">
+            <th mat-header-cell mat-sort-header sortActionDescription="Sort by issue_raised_by" *matHeaderCellDef>
+              Issue Raised By
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element && element.user_ID && element.user_ID.first_name ? element.user_ID.first_name : ''}}
+              {{element && element.user_ID && element.user_ID.last_name ? element.user_ID.last_name : ''}}
+
+            </td>
+          </ng-container>
+          <!-- issue_date Column -->
+          <ng-container matColumnDef="issue_date">
+            <th mat-header-cell mat-sort-header sortActionDescription="Sort by issue_date" *matHeaderCellDef>
+              Issue At
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{(element && element.createdAt ? element.createdAt : '') | date:'MMM d, y' }}
+            </td>
+          </ng-container>
+
+          <!-- issue_status -->
+          <ng-container matColumnDef="issue_status">
+            <th mat-header-cell mat-sort-header sortActionDescription="Sort by issue_status" *matHeaderCellDef>
+              Issue Status
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element && element.issue_status ? element.issue_status : ''}}
+            </td>
+          </ng-container>
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef class="action">Action</th>
+            <td mat-cell *matCellDef="let row" style="text-align: center">
+              <button *ngIf="this.role !== 'Admin' ||this.role !== 'SuperAdmin'||this.role=='User'" mat-mini-fab
+                class="btn-view" matTooltip="Edit Issue" aria-label="Example icon button with a delete icon"
+                (click)="edit_issue_dailog(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <!-- Issue not found message -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="text-center">No Issue Found</td>
+          </tr>
+          <!-- pagination -->
+          <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </table>
+      </div>
+    </div>
+    <!-- </div> -->

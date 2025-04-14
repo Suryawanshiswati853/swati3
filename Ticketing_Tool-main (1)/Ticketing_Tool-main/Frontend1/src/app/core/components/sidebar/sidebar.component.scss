@@ -1,0 +1,149 @@
+.mat-drawer-container {
+  background-color: #ffffff;
+}
+
+.sidenav_container {
+  min-width: 72px;
+  height: calc(100vh - 200px);
+}
+
+.matsidemenu {
+  width: 100%;
+
+  mat-icon {
+    color: #737373;
+  }
+
+  .mat-button {
+    color: #737373;
+  }
+}
+
+.name {
+  font-size: 10px;
+
+}
+
+.item-icon {
+  margin: 0px 8px;
+}
+
+.collapse_nav {
+  padding: 0px 10px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.list-item {
+  margin: 10px 0;
+}
+
+.active-link {
+  color: #000000;
+}
+
+.mat-nav-list a,
+.mat-icon-button {
+  color: #737373;
+}
+
+.mat-nav-list:hover {
+  color: #000000;
+}
+
+.logo-link {
+  text-align: center;
+}
+
+.logo {
+  max-height: 35px;
+  text-align: center;
+
+  margin-bottom: 20px;
+}
+
+.userbox {
+  padding: 10px;
+  background: #333333;
+  border: 1px solid #ffffff80;
+  border-radius: 10px;
+
+  img {
+    max-height: 45px;
+    border-radius: 100%;
+  }
+
+  .userprofile {
+    display: flex;
+  }
+
+  .userinfo {
+    padding-left: 10px;
+    padding-right: 10px;
+
+    p {
+      color: white;
+      margin-bottom: 0px;
+    }
+
+  }
+
+  .box {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(10, 10, 10, 0.1);
+    background-color: #ffffff;
+  }
+
+  .usermenu {
+    ::ng-deep {
+      .mat-select-value {
+        color: #000000;
+      }
+
+      .mat-form-field-appearance-outline .mat-form-field-wrapper {
+        margin: 1.2em 0;
+        padding-bottom: 0em;
+      }
+
+      .mat-form-field-infix {
+        border-top: 0.44375em solid transparent;
+      }
+
+      .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+        transform: translateY(-9%);
+      }
+
+      .mat-form-field-appearance-outline .mat-form-field-outline {
+        background: white;
+        border-radius: 10px;
+      }
+
+      .mat-form-field-appearance-outline .mat-form-field-outline:hover {
+        background: white;
+        border-radius: 10px;
+      }
+    }
+  }
+}
+
+.mat-nav-list .mat-list-item {
+  border-bottom: 1px solid rgba(7, 6, 6, 0.27);
+  // border-bottom: 1px solid rgba(245, 11, 11, 0.27);
+}
+
+.mat-list-item:hover {
+  background: #ffffff;
+
+  .mat-icon {
+    color: #000000;
+  }
+
+  a {
+    color: #000000;
+  }
+
+
+}

@@ -1,0 +1,45 @@
+<div id="category-map-dailog">
+    <div class="flex-container">
+        <div *ngIf="!editcategoryflag||!addcategoryflag" class="map-dailog">
+            <h2>Map Category</h2>
+            <button mat-icon-button class="close-button" [mat-dialog-close]="dailog_close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <form [formGroup]="mapcategoryform">
+            <div class="input-wrapper">
+                <mat-form-field class="full-width-input" appearance="outline">
+                    <mat-label>Category Name</mat-label>
+                    <input matInput type="text" formControlName="category_name" pattern="[a-zA-Z /]+"
+                        autocomplete="off" />
+                    <mat-error *ngIf="mapcategoryform.get('category_name')?.invalid">
+                        <ng-container *ngIf="mapcategoryform.get('category_name')?.hasError('required')"
+                            style="color: rgb(241, 14, 14);">
+                            Please enter category name
+                        </ng-container>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="autosuggetion left-box">
+                    <mat-label>User Name</mat-label>
+                    <input type="text" placeholder="Select user name " formControlName="user_name" matInput
+                        [matAutocomplete]="auto1" (input)="UserSuggetion($event)" />
+                    <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayuserlist"
+                        (optionSelected)="getuserId($event.option.value)">
+                        <mat-option *ngFor="let user of user_data" [value]="user">
+                            {{ user?.first_name }} {{ user?.last_name }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="mapcategoryform.get('user_name')?.invalid">
+                        <ng-container *ngIf="mapcategoryform.get('user_name')?.hasError('required')"
+                            style="color: rgb(241, 14, 14);">
+                            Please select a user name
+                        </ng-container>
+                        <mat-error *ngIf="mapcategoryform.get('user_name')?.hasError('userNotFound')">User not
+                            found</mat-error>
+                    </mat-error>
+                </mat-form-field>
+                <div>
+                    <button mat-button color="primary" type="submit" class="btn-primary" (click)="SubmitCategory()">
+                        Map
+                    </button>
+                </div>

@@ -1,0 +1,177 @@
+<!-- dailog box -->
+<div id="issue-raised-dailog">
+    <div class="flex-container">
+        <div *ngIf="!editIssueflag" class="add-dailog">
+            <!-- Add Button -->
+            <h2>Raise an issue</h2>
+            <button mat-icon-button class="close-button" [mat-dialog-close]="dailog_close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <!-- Add Form -->
+        <div style="height: 400px; overflow: auto;">
+            <form [formGroup]="addform" (ngSubmit)="onSubmit()" *ngIf="!editIssueflag" enctype="multipart/form-data">
+                <div class="margin-top">
+                    <!--Issue Title -->
+                    <div class="input-wrapper">
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label>Issue Title</mat-label>
+                            <input matInput type="text" formControlName="issue_title"
+                                pattern="[a-zA-Z0-9\s.,?!'():;\-]+" maxlength="100" autocomplete="off" />
+                            <mat-error *ngIf="addform.get('issue_title')?.invalid">
+                                <ng-container *ngIf="addform.get('issue_title')?.hasError('required')"
+                                    style="color: rgb(241, 14, 14);">
+                                    Please enter issue title
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--Issue category -->
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label>Issue Categories</mat-label>
+                            <mat-select [(value)]="issue_type" formControlName="issue_type"
+                                (selectionChange)="displayFn($event.value)">
+                                <mat-option value="">Select Issue Categories</mat-option>
+                                <mat-option *ngFor="let cat of categorylist" [value]="cat._id">
+                                    {{ cat.category_name }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error style="color: rgb(241, 14, 14)">
+                                Please Select Issue categories
+                            </mat-error>
+                        </mat-form-field>
+                        <!--Assigned to -->
+                        <div class="input-wrapper">
+                            <mat-form-field class="full-width-input" appearance="outline">
+                                <mat-label>Assigned To</mat-label>
+                                <mat-select [(value)]="assigned_to" formControlName="assigned_to">
+                                    <mat-option value="">Select Assigned To</mat-option>
+                                    <mat-option *ngFor="let cat of assigned_to_list"
+                                        [value]="cat.user_id ? cat.user_id._id : null">
+                                        {{cat.user_id ? cat.user_id.first_name + ' ' + cat.user_id.last_name : ''}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error style="color: rgb(241, 14, 14)">
+                                    Please Select Issue categories
+                                </mat-error>
+
+                            </mat-form-field>
+                            <!--Issue status -->
+
+                            <mat-form-field class="full-width-input" appearance="outline">
+                                <mat-label>Issue Status</mat-label>
+                                <mat-select formControlName="issue_status">
+                                    <mat-option>Select Issue Status</mat-option>
+                                    <mat-option value="Open">Open</mat-option>
+                                    <mat-option value="In-Progress">In-Progress</mat-option>
+                                    <mat-option value="Close">Closed</mat-option>
+                                </mat-select>
+
+                            </mat-form-field>
+                        </div>
+                        <!--Description -->
+                        <div class="input-wrapper">
+                            <mat-form-field class="full-width-input" appearance="outline">
+                                <mat-label>Description</mat-label>
+                                <textarea matInput matTextareaAutosize placeholder="" formControlName="issue_summery"
+                                    pattern="[a-zA-Z0-9\s.,?!'():;\-]+" maxlength="300" autocomplete="off">
+                        </textarea>
+                                <mat-error *ngIf="addform.get('issue_summery')?.invalid">
+                                    <ng-container *ngIf="addform.get('issue_summery')?.hasError('required')"
+                                        style="color: rgb(241, 14, 14);">
+                                        Please enter description
+                                    </ng-container>
+                                    <ng-container *ngIf="addform.get('issue_summery')?.hasError('pattern')"
+                                        style="color: rgb(241, 14, 14);">
+                                        Please enter valid description
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!--Attachements -->
+                        <div class="labeldiv">
+                            <div class="labeldiv">
+                                <mat-label> Attach file : </mat-label>
+                                <input id="pay_slip" type="file" accept=".pdf, image/png, image/jpeg"
+                                    (change)="onFileChange($event)" placeholder="Upload Receipt" multiple />
+
+                                <div *ngIf="imageSrc.length > 0" style="display: flex;">
+                                    <ng-container *ngFor="let image of imageSrc">
+                                        <mat-card style="height: 40px; width: 40px; margin: 5px;">
+                                            <img [src]="image" style="height: 40px; width: 40px;">
+                                        </mat-card>
+                                    </ng-container>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <button mat-button color="primary" type="submit" class="btn-primary" type="submit">
+                                    SUBMIT
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- </div> -->
+            </form>
+        </div>
+
+        <!--Edit Form -->
+        <form [formGroup]="editIssue_form" (ngSubmit)="editIssueDetails()" *ngIf="editIssueflag">
+            <div class="margin-top">
+                <!--Issue Title -->
+                <div class="input-wrapper">
+                    <mat-form-field class="full-width-input" appearance="outline">
+                        <mat-label>Issue Title</mat-label>
+                        <input matInput type="text" formControlName="issue_title" readonly />
+                    </mat-form-field>
+                    <!--Issue Category -->
+                    <mat-form-field class="full-width-input" appearance="outline">
+                        <mat-label>Issue Categories</mat-label>
+                        <input matInput type="text" formControlName="issue_type" readonly />
+                    </mat-form-field>
+                    <!--Assigned To -->
+                    <div class="input-wrapper">
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label>Assigned To</mat-label>
+                            <mat-option *ngFor="let user of user_data" [value]="user">
+                                {{user._id.assigned_to.first_name}} {{user._id.assigned_to.last_name}}
+                            </mat-option>
+                            <input matInput type="text" formControlName="assigned_to" readonly />
+                        </mat-form-field>
+                        <!--Issue status -->
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label>Issue Status</mat-label>
+                            <mat-select formControlName="issue_status">
+                                <mat-option>Select Issue Status</mat-option>
+                                <mat-option value="Open">Open</mat-option>
+                                <mat-option value="In-Progress">In-Progress</mat-option>
+                                <mat-option value="Close">Close</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div>
+                    <!--Description -->
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="description" pattern="^[ a-zA-Z]*$" readonly></textarea>
+                    </mat-form-field>
+                </div>
+                <!--Attachements -->
+                <div class="labeldiv">
+                    <mat-label> Attach file : </mat-label>
+                    <input id="pay_slip" type="file" accept=".pdf, image/png, image/jpeg"
+                        (change)="onFileChange($event)" placeholder="Upload Receipt" />
+                </div>
+                <div>
+                    <!-- submit Button -->
+                    <button mat-button color="primary" type="submit" class="btn-primary"
+                        [disabled]="!editIssue_form.valid">
+                        SUBMIT
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>

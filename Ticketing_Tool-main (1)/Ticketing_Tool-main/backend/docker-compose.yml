@@ -1,0 +1,104 @@
+version: "3.3"
+services:
+  #login-service
+  login:
+    hostname: TicketingTool
+    image: login-service
+    env_file:
+      - .env
+    build:
+      context: login-service
+      dockerfile: Dockerfile
+    container_name: login
+    ports:
+      - "7000:7000"
+      - "7123:7000"
+      - "7124:7000"
+      - "7125:7000"
+
+    restart: on-failure
+
+  #user_management
+  user:
+    hostname: TicketingTool
+    image: user_management
+    env_file:
+      - .env
+    build:
+      context: user-management
+      dockerfile: Dockerfile
+    container_name: user
+    ports:
+      - "7001:7001"
+      - "7126:7001"
+      - "7127:7001"
+      - "7128:7001"
+
+    restart: on-failure
+
+  #issue-logging
+  issue:
+    hostname: TicketingTool
+    image: issue-logging
+    env_file:
+      - .env
+    build:
+      context: Issue-Logging
+      dockerfile: Dockerfile
+    container_name: issue
+    ports:
+      - "7002:7002"
+      - "7129:7002"
+      - "7130:7002"
+      - "7131:7002"
+
+    restart: on-failure
+
+  #category_management
+  category:
+    hostname: TicketingTool
+    image: category_management
+    env_file:
+      - .env
+    build:
+      context: Category-Management
+      dockerfile: Dockerfile
+    container_name: category
+    ports:
+      - "7003:7003"
+      - "7132:7003"
+      - "7133:7003"
+      - "7134:7003"
+
+    restart: on-failure
+
+  #emailService
+  emailService:
+    hostname: TicketingTool
+    image: emailservice
+    env_file:
+      - .env
+    build:
+      context: emailService
+      dockerfile: Dockerfile
+    container_name: emailservice
+
+    restart: on-failure
+
+    #Nginx Service
+  #nginx:
+  #image: nginx
+  #env_file:
+  #  - .env
+  #build:
+  #  context: nginx
+  #  dockerfile: Dockerfile
+  #ports:
+  #  - "80:80"
+  #depends_on:
+  #  - login-service
+  #  - user-management
+  #  - Issue-Logging
+  #  - Category-Management
+
+  # - collection

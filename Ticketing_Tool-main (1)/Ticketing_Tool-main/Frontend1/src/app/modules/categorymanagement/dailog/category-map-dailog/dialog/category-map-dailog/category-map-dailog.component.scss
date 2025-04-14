@@ -1,0 +1,161 @@
+#category-map-dailog {
+    ::ng-deep {
+        .mat-form-field.mat-form-field-invalid .mat-form-field-label {
+            color: #000000;
+        }
+
+        .mat-form-field.mat-form-field-invalid .mat-form-field-label {
+            color: #c4c4c4;
+        }
+
+        .map-dailog {
+            display: flex;
+            justify-content: space-between;
+
+            .mat-icon-button {
+                padding: 0;
+                min-width: 0;
+                width: 25px;
+                height: 25px;
+                flex-shrink: 0;
+                line-height: 25px;
+                border-radius: 50%;
+            }
+
+            .mat-icon {
+                font-size: 15px;
+            }
+        }
+
+        .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
+            color: #c4c4c4;
+        }
+
+        .mat-form-field.mat-form-field-invalid .mat-form-field-label.mat-accent,
+        .mat-form-field.mat-form-field-invalid .mat-form-field-label .mat-form-field-required-marker {
+            color: #c4c4c4;
+        }
+
+        .mat-horizontal-stepper-header {
+            height: 44px;
+            padding: 0 22px;
+        }
+
+        .mat-horizontal-content-container {
+            padding: 0 5px 24px 5px;
+        }
+
+        .mat-form-field-wrapper {
+            padding-bottom: 0.5em;
+        }
+
+        .mat-form-field-infix {
+            border-top: 0.6em solid transparent;
+        }
+
+        .mat-step-header .mat-step-icon {
+            background-color: #cccccc;
+        }
+
+        .mat-step-header .mat-step-icon-state-done {
+            background-color: #cccccc;
+        }
+
+        .mat-step-header .mat-step-icon-state-edit {
+            background-color: #cccccc;
+        }
+
+        .mat-step-header .mat-step-icon-selected {
+            background-color: #000000;
+        }
+
+        .mat-step-header .mat-step-label.mat-step-label-active {
+            color: #000000;
+        }
+    }
+
+    .labeldiv {
+        margin-bottom: 15px;
+        margin-top: 0px;
+        align-self: center;
+
+        mat-label {
+            font-weight: 600;
+        }
+    }
+
+    .btn-primary {
+        // background-size: 200% auto;
+        background: rgb(255, 241, 241);
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 6px;
+        margin-top: 10px;
+        transition: 0.5s;
+        box-shadow: 0 0 20px #eee;
+    }
+
+    .btn-primary:hover {
+        background-image: linear-gradient(to right, #1FA2FF 0%, #12D8FA 51%, #1FA2FF 100%);
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .mat-radio-button~.mat-radio-button {
+        margin-left: 16px;
+    }
+
+    .margin-top {
+        margin-top: 1rem;
+    }
+
+    .btn-primary-outline {
+        width: 100%;
+        padding: 4px 4px;
+        line-height: 34px;
+        margin-top: 3px;
+        border: 1px solid #f79e1b;
+        color: #f79e1b;
+    }
+
+    .add-dailog,
+    .edit-dailog {
+        display: flex;
+        justify-content: space-between;
+
+        .mat-icon-button {
+            padding: 0;
+            min-width: 0;
+            width: 25px;
+            height: 25px;
+            flex-shrink: 0;
+            line-height: 25px;
+            border-radius: 50%;
+        }
+
+        .mat-icon {
+            font-size: 15px;
+        }
+    }
+
+    .input-wrapper {
+        padding: 6px 0px 12px 0px;
+
+        .mat-form-field {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        .mat-error {
+            margin-top: 12px;
+        }
+    }
+
+    @media only screen and (max-width: 767px) {
+        .input-wrapper {
+            .mat-form-field {
+                width: 100%;
+            }
+        }
+    }
+}

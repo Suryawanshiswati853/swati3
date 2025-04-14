@@ -1,0 +1,45 @@
+<div class="sidenav_container" [@onSideNavChange]="sideNavState ? 'open' : 'close'">
+  <div style="height: 100%">
+    <div class="logo-link smalllogo">
+
+      <img class="logo" style="margin-right: 20px;" />
+    </div>
+    <div class="logo-link biglogo">
+      <img class="logo " src="../../../../assets/images/tech-trail_logo.png" alt="Logo" />
+    </div>
+    <mat-card
+      style="border: 1px solid #c0c3c7;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);border-radius: 10px;padding: 5px; font-size: 14px;">
+      <div class="box">
+        <h3 style="color: #000000; text-align: center; font-weight: 500;"> Welcome </h3>
+        <h3 style="color: #000000; text-align: center;"> {{first_name}} {{last_name}} </h3>
+      </div>
+    </mat-card>
+    <!-- <mat-card>
+      <div class="box">
+        <h3 style="color: #000000; text-align: center; font-weight: 500;"> Welcome </h3>
+        <h3 style="color: #000000; text-align: center;">{{first_name}} {{last_name}} </h3>
+      </div>
+    </mat-card> -->
+    <div class="matsidemenu">
+      <mat-nav-list>
+        <mat-list-item routerLinkActive="active" (click)="openUsermanagentPage()"
+          *ngIf="(this.role=='Admin'||this.role=='SuperAdmin')">
+          <mat-icon mat-list-icon>supervised_user_circle</mat-icon>
+          <a matLine> User management</a>
+        </mat-list-item>
+
+        <mat-list-item routerLinkActive="active" (click)="openIssuePage()"
+          *ngIf="(this.role=='Admin'||this.role=='SuperAdmin'||this.role=='User')">
+          <mat-icon mat-list-icon>report_problem</mat-icon>
+          <a matLine>Issue Management</a>
+        </mat-list-item>
+        <mat-list-item routerLinkActive="active" (click)="openCategoryPage()"
+          *ngIf="(this.role=='Admin'||this.role=='SuperAdmin')">
+          <mat-icon mat-list-icon>category</mat-icon>
+          <a matLine>Category Management</a>
+        </mat-list-item>
+
+      </mat-nav-list>
+    </div>
+  </div>
+</div>

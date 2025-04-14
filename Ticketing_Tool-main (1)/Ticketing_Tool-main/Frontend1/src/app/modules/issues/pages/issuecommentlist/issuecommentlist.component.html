@@ -1,0 +1,162 @@
+<app-layout>
+    <div id="issuecommentlist">
+        <div class="main-wrapper">
+            <div class="header">
+                <!--back button and title-->
+                <h2 class="back-link" [style.color]="'black'">
+                    <span (click)="back1()">
+                        <mat-icon>arrow_back</mat-icon>
+                    </span>
+                    Comments
+                </h2>
+                <!-- edit issue form-->
+                <form [formGroup]="editIssue_form" (ngSubmit)="editIssueDetails()">
+                    <div class="margin-top">
+                        <!--Issue Title -->
+                        <div class="input-wrapper">
+                            <mat-form-field class="full-width-input" appearance="outline">
+                                <mat-label>Issue Title</mat-label>
+                                <input matInput type="text" formControlName="issue_title" readonly />
+                            </mat-form-field>
+                            <!--Issue Category -->
+                            <mat-form-field class="full-width-input" appearance="outline">
+                                <mat-label>Issue Categories</mat-label>
+                                <mat-select [(value)]="issue_type" formControlName="issue_type"
+                                    (selectionChange)="loadUsersByCategory($event.value)">
+                                    <mat-option>Select Issue categories</mat-option>
+                                    <mat-option *ngFor="let cat of categorylist" [value]="cat._id">
+                                        {{ cat.category_name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--Assigned To -->
+                            <div class="input-wrapper">
+                                <mat-form-field class="full-width-input" appearance="outline">
+                                    <mat-label>Assigned To</mat-label>
+                                    <mat-select [(value)]="assigned_to" formControlName="assigned_to"
+                                        [compareWith]="compareFn">
+                                        <mat-option value="  ">{{defaultval}}</mat-option>
+                                        <mat-option *ngFor="let cat of userlist" [value]="cat.user_id?._id">
+                                            {{ cat.user_id?.first_name}} {{ cat.user_id?.last_name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <!--Issue status -->
+                                <mat-form-field class="full-width-input" appearance="outline">
+                                    <mat-label>Issue Status</mat-label>
+                                    <mat-select formControlName="issue_status" (selectionChange)="statuschange($event)">
+                                        <mat-option>Select Issue Status</mat-option>
+                                        <mat-option value="Open">Open</mat-option>
+                                        <mat-option value="In-Progress">In-Progress</mat-option>
+                                        <mat-option value="Close">Closed</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div>
+                            <!--Description -->
+                            <mat-form-field appearance="outline" style="width: 400px;height: 10px;font-size: 15px;">
+                                <mat-label>Description</mat-label>
+                                <textarea matInput formControlName="description" pattern="^[ a-zA-Z . / 0-9]*$"
+                                    readonly="true"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <br>
+                        <div class="title" style="color: #111;font-weight: 900px;"> Attachment file: </div>
+                        <div class="file-container" style="font-size: 14px;">
+                            <div *ngFor="let url of file" class="filename-container">
+                                <mat-card>
+                                    <mat-card-content>
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <img crossorigin="anonymous"
+                                                *ngIf="url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.zip')
+                           || url.endsWith('.XLS') || url.endsWith('.eps') || url.endsWith('.dll') || url.endsWith('.txt') || url.endsWith('.ppt') || url.endsWith('.pdf')"
+                                                [src]="url" style="width: 50px; height: 40px;"
+                                                (click)="open_Doc_Dialog(url)">
+                                            <div style="margin-top: 10px; font-size: 12px;">{{url.split('/').pop()}}
+                                            </div>
+                                        </div>
+                                    </mat-card-content>
+                                    <mat-card-actions>
+                                        <!-- <div class="updated-at-container" style="font-size: 12px;">
+                                            Last Updated: {{ updatedAt | date:'MMM d, y' }}
+                                        </div> -->
+                                        <!-- <div class="updated-at-container" style="font-size: 12px;">
+                                            CreatedAt: {{ createdAt | date:'MMM d, y' }}
+                                        </div> -->
+                                        <!-- <div class="updated-at-container" style="font-size: 12px;">
+                                            CreatedAt: {{ createdAt | date:'hh:mm a' }}
+                                        </div> -->
+                                        <a [href]="url" download class="download-btn">Download</a>
+
+                                        <div *ngIf="url.endsWith('.pdf')">
+                                            <pdf-viewer [src]="url"></pdf-viewer>
+                                        </div>
+
+                                    </mat-card-actions>
+                                </mat-card>
+                            </div>
+                        </div>
+                        <br>
+
+                        <mat-form-field appearance="outline" style="width: 300px;height: 15px;font-size: 15px;">
+                            <mat-label>Comments</mat-label>
+                            <textarea matInput formControlName="comment" pattern="^[ a-zA-Z0-9\s.,?!'():;\-]*$"
+                                maxlength="500"></textarea>
+                        </mat-form-field>
+                        <div>
+                            <!-- submit Button -->
+
+                            <button mat-button color="primary" type="submit" class="btn-primary">
+                                SUBMIT
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <br>
+                <!-- Table -->
+                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+                    matSortDirection="desc" class="mat-elevation-z2">
+                    <!-- Comment Cloumn -->
+                    <ng-container matColumnDef="comments">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Comments
+                        </th>
+                        <td mat-cell *matCellDef="let element" maxlength="500">
+                            {{element&&element.comment?element.comment:''}}
+                        </td>
+                    </ng-container>
+
+                    <!-- createdAt cloumn -->
+                    <ng-container matColumnDef="createdAt">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                            Created At
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{(element && element.createdAt ? element.createdAt : '') | date:'MMM d, y' }}
+                        </td>
+                    </ng-container>
+                    <!-- user_name Column -->
+                    <ng-container matColumnDef="createdBy">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Created By
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element&&element.user_Name?element.user_Name:''}}
+                        </td>
+                    </ng-container>
+                    <!-- Message -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="text-center">No Comment Found</td>
+                    </tr>
+                </table>
+                <!-- Pagination -->
+                <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+        </div>
+    </div>

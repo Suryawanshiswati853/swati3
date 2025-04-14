@@ -1,0 +1,275 @@
+<div id="add-edit-dailog">
+    <div class="flex-container">
+        <div *ngIf="!editUserflag" class="add-dailog">
+            <!--add User Button-->
+            <h2>Add New User</h2>
+            <button mat-icon-button class="close-button" [mat-dialog-close]="dailog_close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <!--Edit User Button-->
+        <div *ngIf="editUserflag" class="edit-dailog">
+            <h2>Edit User</h2>
+            <button mat-icon-button class="close-button" [mat-dialog-close]="dailog_close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <!--add Form-->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!editUserflag">
+            <div class="margin-top">
+                <!--Employee id-->
+                <div class="input-wrapper">
+                    <div class="emp">
+                        <div>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Employee Id</mat-label>
+                                <input matInput type="text" formControlName="emp_id" (input)="emp_id_check($event)"
+                                    minlength="3" maxlength="4" required autocomplete="off" />
+                                <mat-error style="color: rgb(241, 14, 14);">
+                                    Please enter employee id
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-error *ngIf="emp_id_flag"
+                                style="color: rgb(241, 14, 14); font-size: 10px; margin-left:10px; margin-top: -10px;">
+                                Employee id already exist
+                            </mat-error>
+                        </div>
+                        <!-- First Name-->
+                        <div>
+                            <mat-form-field appearance="outline">
+                                <mat-label>First Name</mat-label>
+                                <input matInput type="text" formControlName="first_name" (input)="isFormEdited = true"
+                                    pattern="[a-zA-Z . / -]+" autocomplete="off" />
+                                <mat-error *ngIf="form.get('first_name')?.invalid">
+                                    <ng-container *ngIf="form.get('first_name')?.hasError('required')"
+                                        style="color: rgb(241, 14, 14);">
+                                        Please enter first name
+                                    </ng-container>
+                                    <ng-container *ngIf="form.get('first_name')?.hasError('pattern')"
+                                        style="color: rgb(241, 14, 14);">
+                                        Only letters are allowed in this field.
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <!-- last Name-->
+                    <div class="input-wrapper">
+                        <div class="emp">
+                            <div>
+                                <mat-form-field class="full-width-input" appearance="outline">
+                                    <mat-label>Last Name</mat-label>
+                                    <input matInput type="text" formControlName="last_name" pattern="[a-zA-Z . / -]+"
+                                        autocomplete="off" />
+                                    <mat-error *ngIf="form.get('last_name')?.invalid">
+                                        <ng-container *ngIf="form.get('last_name')?.hasError('required')"
+                                            style="color: rgb(241, 14, 14);">
+                                            Please enter last name
+                                        </ng-container>
+                                        <ng-container *ngIf="form.get('last_name')?.hasError('pattern')"
+                                            style="color: rgb(241, 14, 14);">
+                                            Only letters are allowed in this field.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <!-- Email-->
+                            <div>
+                                <mat-form-field class="full-width-input" appearance="outline">
+                                    <mat-label> Email </mat-label>
+                                    <input matInput formControlName="email" (input)="email_id_check($event)"
+                                        pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+                                    <mat-error *ngIf="form.get('email')?.invalid">
+                                        <ng-container *ngIf="form.get('email')?.hasError('required')"
+                                            style="color: rgb(241, 14, 14);">
+                                            Please enter the Email
+                                        </ng-container>
+                                        <ng-container *ngIf="form.get('email')?.hasError('pattern')"
+                                            style="color: rgb(241, 14, 14);">
+                                            Please enter valid Email
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-error *ngIf="ema_id_flag"
+                                    style="color: rgb(241, 14, 14); font-size: 10px; margin-left:10px; margin-top: -10px;">
+                                    Email address already exist
+                                </mat-error>
+                            </div>
+                        </div>
+                        <!--Mobile No-->
+                        <div class="input-wrapper">
+                            <mat-form-field class="full-width-input" appearance="outline">
+                                <mat-label>Mobile No</mat-label>
+                                <input matInput type="text" formControlName="mobile_number" minlength="10"
+                                    autocomplete="off" maxlength="10" pattern="[6789][0-9]{9}" />
+                                <mat-error *ngIf="form.get('mobile_number')?.invalid">
+                                    <ng-container *ngIf="form.get('mobile_number')?.hasError('required')"
+                                        style="color: rgb(241, 14, 14);">
+                                        Please enter the Mobile Number
+                                    </ng-container>
+                                    <ng-container *ngIf="form.get('mobile_number')?.hasError('pattern')"
+                                        style="color: rgb(241, 14, 14);">
+                                        Please enter valid Mobile No
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                            <!--Password-->
+                            <mat-form-field class="full-width-input" appearance="outline">
+                                <mat-label>Password</mat-label>
+                                <input [type]="pwdVisibleA ? 'text' : 'password'" formControlName="password" matInput
+                                    pattern="^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$" autocomplete="off"
+                                    required />
+                                <mat-icon matSuffix class="pass-vis" (click)="pwdVisibleA = !pwdVisibleA">
+                                    {{
+                                    pwdVisibleA ? "visibility_off" : "visibility"
+                                    }}
+                                </mat-icon>
+                                <mat-error style="color: rgb(241, 14, 14)">
+                                    Password must contain at least one capital letter, one small
+                                    letter and one number and any special character like @$_#
+                                    etc
+                                </mat-error>
+                            </mat-form-field>
+                            <!--Role-->
+                            <div class="input-wrapper">
+                                <mat-form-field class="full-width-input" appearance="outline">
+                                    <mat-label>Select Role</mat-label>
+                                    <mat-select formControlName="role" required>
+                                        <mat-option>Select Role</mat-option>
+                                        <mat-option value="User">User</mat-option>
+                                        <mat-option value="Admin">Admin</mat-option>
+                                        <mat-option value="SuperAdmin">SuperAdmin</mat-option>
+                                    </mat-select>
+                                    <mat-error style="color: rgb(241, 14, 14)">
+                                        Please select user role
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <!--save Button-->
+                        <div>
+                            <button mat-button color="primary" type="submit" class="btn-primary" type="submit">
+                                SAVE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!--Edit User-->
+        <form [formGroup]="editUser_form" (ngSubmit)="edit_user_details()" *ngIf="editUserflag">
+            <div class="margin-top">
+                <!--Employee id-->
+                <div class="input-wrapper">
+                    <mat-form-field class="full-width-input" appearance="outline">
+                        <mat-label>Employee Id</mat-label>
+                        <input matInput type="text" formControlName="emp_id" minlength="3" maxlength="4" />
+                        <mat-error style="color: rgb(241, 14, 14)">
+                            Please enter employee Id
+                        </mat-error>
+                    </mat-form-field>
+                    <!--First Name-->
+                    <mat-form-field class="full-width-input" appearance="outline">
+                        <mat-label>First Name</mat-label>
+                        <input matInput type="text" formControlName="first_name" pattern="[a-zA-Z]+"
+                            autocomplete="off" />
+                        <mat-error *ngIf="editUser_form.get('first_name')?.invalid">
+                            <ng-container *ngIf="editUser_form.get('first_name')?.hasError('required')"
+                                style="color: rgb(241, 14, 14);">
+                                Please enter first name
+                            </ng-container>
+                            <ng-container *ngIf="editUser_form.get('first_name')?.hasError('pattern')"
+                                style="color: rgb(241, 14, 14);">
+                                Only letters are allowed in this field.
+                            </ng-container>
+
+                        </mat-error>
+                    </mat-form-field>
+                    <!--last Name-->
+                    <div class="input-wrapper">
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput type="text" formControlName="last_name" pattern="[a-zA-Z]+"
+                                autocomplete="off" />
+                            <mat-error *ngIf="editUser_form.get('last_name')?.invalid">
+                                <ng-container *ngIf="editUser_form.get('last_name')?.hasError('required')"
+                                    style="color: rgb(241, 14, 14);">
+                                    Please enter last name
+                                </ng-container>
+                                <ng-container *ngIf="editUser_form.get('last_name')?.hasError('pattern')"
+                                    style="color: rgb(241, 14, 14);">
+                                    Only letters are allowed in this field.
+                                </ng-container>
+
+                            </mat-error>
+                        </mat-form-field>
+                        <!--Email-->
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label> Email </mat-label>
+                            <input matInput formControlName="email"
+                                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+                            <mat-error *ngIf="editUser_form.get('email')?.invalid">
+                                <ng-container *ngIf="editUser_form.get('email')?.hasError('required')"
+                                    style="color: rgb(241, 14, 14);">
+                                    Please enter the Email
+                                </ng-container>
+                                <ng-container *ngIf="editUser_form.get('email')?.hasError('pattern')"
+                                    style="color: rgb(241, 14, 14);">
+                                    Please enter valid Email
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!--Mobile-->
+                    <div class="input-wrapper">
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label>Mobile No</mat-label>
+                            <input matInput type="text" formControlName="mobile_number" minlength="10" maxlength="10"
+                                pattern="[6789][0-9]{9}" autocomplete="off" />
+                            <mat-error *ngIf="editUser_form.get('mobile_number')?.invalid">
+                                <ng-container *ngIf="editUser_form.get('mobile_number')?.hasError('required')"
+                                    style="color: rgb(241, 14, 14);">
+                                    Please enter the Mobile Number
+                                </ng-container>
+
+                            </mat-error>
+                        </mat-form-field>
+                        <!--Role-->
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label>Select Role</mat-label>
+                            <mat-select formControlName="role" required>
+                                <mat-option>Select Role</mat-option>
+                                <mat-option value="User">User</mat-option>
+                                <mat-option value="Admin">Admin</mat-option>
+                                <mat-option value="SuperAdmin">SuperAdmin</mat-option>
+                            </mat-select>
+                            <mat-error style="color: rgb(241, 14, 14)">
+                                Please select user role
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!--status-->
+                    <div class="input-wrapper">
+                        <mat-form-field class="full-width-input" appearance="outline">
+                            <mat-label>Select Status</mat-label>
+                            <mat-select formControlName="status" required>
+                                <mat-option>Select Status</mat-option>
+                                <mat-option value="Inactive">Inactive</mat-option>
+                                <mat-option value="Active">Active</mat-option>
+                            </mat-select>
+                            <mat-error style="color: rgb(241, 14, 14)">
+                                Please select status
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <!--save Button-->
+            <div>
+                <button mat-button color="primary" type="submit" class="btn-primary">
+                    SAVE
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

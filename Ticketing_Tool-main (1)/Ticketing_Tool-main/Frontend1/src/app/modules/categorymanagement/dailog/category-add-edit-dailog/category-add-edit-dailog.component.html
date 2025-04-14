@@ -1,0 +1,83 @@
+<div id="add-edit-dailog">
+    <div class="flex-container">
+        <div *ngIf="!editcategoryflag" class="add-dailog">
+            <!-- Add category Button -->
+            <h2>Add Category</h2>
+            <button mat-icon-button class="close-button" [mat-dialog-close]="dailog_close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <!-- Edit category Button -->
+        <div *ngIf="editcategoryflag" class="edit-dailog">
+            <h2>Edit Category</h2>
+            <button mat-icon-button class="close-button" [mat-dialog-close]="dailog_close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <!-- Add Form -->
+        <form [formGroup]="addcategoryform" (ngSubmit)="onSubmitCategory()" *ngIf="!editcategoryflag">
+            <div class="margin-top">
+                <div class="input-wrapper">
+                    <mat-form-field class="full-width-input" appearance="outline">
+                        <mat-label>Category Name</mat-label>
+                        <input matInput type="text" formControlName="category_name" pattern="[a-zA-Z]+"
+                            autocomplete="off" />
+                        <mat-error *ngIf="addcategoryform.get('category_name')?.invalid">
+                            <ng-container *ngIf="addcategoryform.get('category_name')?.hasError('required')"
+                                style="color: rgb(241, 14, 14);">
+                                Please enter category name
+                            </ng-container>
+                            <ng-container *ngIf="addcategoryform.get('category_name')?.hasError('pattern')"
+                                style="color: rgb(241, 14, 14);">
+                                Only letters are allowed in this field.
+                            </ng-container>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="autosuggetion left-box">
+                        <mat-label>Primary Contact Name</mat-label>
+                        <input type="text" formControlName="primary_contact" placeholder="Select Primary Contact"
+                            matInput [matAutocomplete]="auto1" (input)="UserSuggetion($event)" />
+                        <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFn"
+                            (optionSelected)="getId($event.option.value)">
+                            <mat-option *ngFor="let user of user_data" [value]="user">
+                                {{ user?.first_name }} {{ user?.last_name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="addcategoryform.get('primary_contact')?.invalid">
+                            <ng-container *ngIf="addcategoryform.get('primary_contact')?.hasError('required')"
+                                style="color: rgb(241, 14, 14);">
+                                Please select primary contact
+                            </ng-container>
+                            <mat-error *ngIf="addcategoryform.get('primary_contact')?.hasError('userNotFound') "> User
+                                not found</mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div>
+                <button mat-button color="primary" type="submit" class="btn-primary">
+                    SAVE
+                </button>
+            </div>
+        </form>
+        <!-- Edit Form -->
+        <form [formGroup]="editcategory_form" (ngSubmit)="edit_category_details()" *ngIf="editcategoryflag">
+            <div class="margin-top">
+                <div class="input-wrapper">
+                    <!-- Category Name -->
+                    <mat-form-field class="full-width-input" appearance="outline">
+                        <mat-label>Category Name</mat-label>
+                        <input matInput type="text" formControlName="category_name" pattern="[a-zA-Z]+" required />
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- Save Button -->
+            <div>
+                <button mat-button color="primary" type="submit" class="btn-primary">
+                    SAVE
+                </button>
+            </div>
+
+        </form>

@@ -1,0 +1,106 @@
+#mapcategory_page {
+    .main-wrapper {
+        padding: 20px;
+        font-size: 10px;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .expitem {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .mat-header-cell {
+        font-size: 16px;
+        background: #DCEBF5;
+        color: black;
+    }
+
+    .mat-form-field {
+        margin-right: 15px;
+    }
+
+    .actioncol {
+        text-align: center;
+    }
+
+    .btn-export {
+        background: #f79e1b;
+        color: white;
+        margin-right: 5px;
+        vertical-align: super;
+    }
+
+    .btn-view {
+        background: black;
+        color: white;
+        margin-left: 5px;
+        margin-right: 5px;
+        box-shadow: none;
+    }
+
+    .btn-delete {
+        background: red;
+        color: white;
+        margin-left: 5px;
+        margin-right: 5px;
+        box-shadow: none;
+    }
+
+    .btn-upload {
+        background-image: linear-gradient(to right, #1FA2FF 0%, #12D8FA 51%, #1FA2FF 100%);
+        background-size: 200% auto;
+        color: white;
+        margin: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
+        box-shadow: none;
+        padding: 5px 31px;
+        vertical-align: 2px;
+        font-size: 18px;
+        border-radius: 7px;
+    }
+
+    .text-right {
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .category {
+        font-weight: 500;
+        height: 20px;
+        margin-left: 20px;
+
+    }
+
+    .title1 {
+        margin-left: 10px;
+    }
+
+    .back-link {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        font-size: 19px;
+        font-weight: 500;
+        margin-bottom: 16px;
+    }
+
+    mat-icon {
+        margin-right: 8px;
+    }
+
+    .text-center {
+        font-size: 15px;
+    }
+
+    mat-paginator {
+        margin-bottom: 11px;
+    }
+
+}
