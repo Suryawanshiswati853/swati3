@@ -1,0 +1,25 @@
+{
+  "orderId": "ORD123456",
+  "driver": {
+    "id": "DR001",
+    "name": "Ravi Kumar",
+    "vehicle": "Honda Activa",
+    "phone": "+91 9999999999"
+  },
+  "customer": {
+    "lat": 17.424354,
+    "lng": 78.473945,
+    "address": "Near Necklace Road, Hyderabad"
+  },
+  "route": [
+    { "lat": 17.437462, "lng": 78.448288, "status": "picked" },
+    { "lat": 17.435180, "lng": 78.452510, "status": "en_route" },
+    { "lat": 17.432785, "lng": 78.455986, "status": "en_route" },
+    { "lat": 17.431122, "lng": 78.458565, "status": "en_route" },
+    { "lat": 17.430290, "lng": 78.463020, "status": "en_route" },
+    { "lat": 17.429390, "lng": 78.466690, "status": "en_route" },
+    { "lat": 17.426620, "lng": 78.469780, "status": "arriving" },
+    { "lat": 17.425280, "lng": 78.471740, "status": "arriving" },
+    { "lat": 17.424354, "lng": 78.473945, "status": "delivered" }
+  ]
+}
