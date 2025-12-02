@@ -5,19 +5,19 @@ import 'package:task_demo/newapp/screens/login_screen.dart';
 
 
     void main()async {
-    WidgetsFlutterBinding.ensureInitialized();
-    try {
-     await Firebase.initializeApp(
-     options:  const FirebaseOptions(
-     apiKey:"AIzaSyAykVVtVLIWDNRMRSVIrSPjOj-IOAMdX2Q",
-     projectId:"taskdemo-c4f32",
-     messagingSenderId:"60293798240",
-     appId:"1:60293798240:android:57123d84dc8da779486605"),            
-     );
-     } catch (e) {
-      print("Error initializing Firebase: $e");
-      return;
-      }
+   // WidgetsFlutterBinding.ensureInitialized();
+    // try {
+    //  await Firebase.initializeApp(
+    //  options:  const FirebaseOptions(
+    //  apiKey:"AIzaSyAykVVtVLIWDNRMRSVIrSPjOj-IOAMdX2Q",
+    //  projectId:"taskdemo-c4f32",
+    //  messagingSenderId:"60293798240",
+    //  appId:"1:60293798240:android:57123d84dc8da779486605"),            
+    //  );
+    //  } catch (e) {
+    //   print("Error initializing Firebase: $e");
+    //   return;
+    //   }
      runApp( MyApp(),
     );
   
