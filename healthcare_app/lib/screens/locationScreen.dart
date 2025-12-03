@@ -1,11 +1,11 @@
-
 import 'package:flutter/material.dart';
-import 'package:healthcare_app/res/components/animation_widget.dart';
+import '../res/components/round_button.dart';
+import 'package:healthcare_app/screens/home_screen.dart';
 import 'package:healthcare_app/res/components/app_bar.dart';
 import 'package:healthcare_app/res/components/constants.dart';
-import 'package:healthcare_app/screens/home_screen.dart';
+import 'package:healthcare_app/res/components/animation_widget.dart';
 
-import '../res/components/round_button.dart';
+
 
 
 class LocationScreen extends StatefulWidget {
@@ -55,9 +55,7 @@ class _LocationScreenState extends State<LocationScreen> {
            
            title: 'Ambulance',
            ),
-          //  SizedBox(
-          //   height: newheight2,
-          //  ),
+         
                Container(
                 height: 580,
               decoration: const BoxDecoration(
